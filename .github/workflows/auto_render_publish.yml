@@ -75,14 +75,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Stickman explainer / story videos come from the Stickman Kino repo (set the repo
-      # variable STICKMAN_KINO_REPO to "owner/name"; add STICKMAN_KINO_TOKEN if it is private).
+      # Stickman explainer / story videos come from the Stickman Kino repo. It defaults to
+      # dsauce/stickman-kino; override with the repo variable STICKMAN_KINO_REPO ("owner/name").
       - name: Fetch Stickman Kino
-        if: ${{ vars.STICKMAN_KINO_REPO != '' }}
         continue-on-error: true
         uses: actions/checkout@v4
         with:
-          repository: ${{ vars.STICKMAN_KINO_REPO }}
+          repository: ${{ vars.STICKMAN_KINO_REPO || 'dsauce/stickman-kino' }}
           path: stickman-kino
           token: ${{ secrets.STICKMAN_KINO_TOKEN || github.token }}
 

@@ -1019,7 +1019,7 @@ export function stickKindOf(CFG: any): 'fight' | 'explainer' | 'story' {
  * Here the app's own AI writes those two files using Kino's own skills/docs as the instructions, then the
  * Kino CLI makes voice + music + SFX, checks the layout and renders the MP4. If the check fails, the errors
  * go back to the AI for a repair (up to 3 rounds). The workflow checks Kino out into ./stickman-kino
- * (repo variable STICKMAN_KINO_REPO = dsauce/stickman-kino).
+ * (defaults to dsauce/stickman-kino; repo variable STICKMAN_KINO_REPO overrides it).
  */
 const KINO_BUDGET_CHARS = 60000;
 function kinoGuide(root: string): string {
@@ -1043,7 +1043,7 @@ async function stickmanKino(kit: Kit, category: 'explainer' | 'story'): Promise<
   const CFG = kit.CFG;
   const root = path.resolve(process.env.STICKMAN_KINO_DIR || 'stickman-kino');
   const cli = path.join(root, 'bin', 'stickman.mjs');
-  if (!fs.existsSync(cli)) throw new kit.PipelineError('kino_missing', 'Stickman Kino is not checked out on the runner. Set the repo variable STICKMAN_KINO_REPO to dsauce/stickman-kino.');
+  if (!fs.existsSync(cli)) throw new kit.PipelineError('kino_missing', 'Stickman Kino is not checked out on the runner. The Fetch Stickman Kino workflow step failed; check that dsauce/stickman-kino is reachable.');
   if (!kit.OUTPUT_VIDEO) throw new kit.PipelineError('kino_output', 'The renderer did not say where the finished video goes.');
   if (kit.CFG.offline || !kit.LLM?.hasKeys) throw new kit.PipelineError('script_retry', 'No AI model is available on the runner to write the film.');
 
