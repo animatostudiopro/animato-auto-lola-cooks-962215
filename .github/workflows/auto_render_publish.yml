@@ -75,6 +75,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Stickman explainer / story videos come from the Stickman Kino repo (set the repo
+      # variable STICKMAN_KINO_REPO to "owner/name"; add STICKMAN_KINO_TOKEN if it is private).
+      - name: Fetch Stickman Kino
+        if: ${{ vars.STICKMAN_KINO_REPO != '' }}
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.STICKMAN_KINO_REPO }}
+          path: stickman-kino
+          token: ${{ secrets.STICKMAN_KINO_TOKEN || github.token }}
+
       - name: Tell the app the runner started
         continue-on-error: true
         run: node animato-cloud/ping.mjs "Your GitHub runner started" 3 "Setting up the tools (about a minute)…" || true
